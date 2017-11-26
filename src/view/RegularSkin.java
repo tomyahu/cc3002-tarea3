@@ -14,6 +14,8 @@ public class RegularSkin implements ISkin {
   public RegularSkin(String strFold) {
     skinFolder = strFold;
     
+    map = new HashMap<String, String>();
+    
     ArrayList<String> coloresArchivo = new ArrayList<String>();
     coloresArchivo.add("blue");
     coloresArchivo.add("red");
