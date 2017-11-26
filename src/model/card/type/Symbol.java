@@ -21,11 +21,11 @@ public enum Symbol {
   SKIP("Saltar"),
   DRAW_TWO("Robar 2"),
   INVERT("Invertir Direccion"),
-  EXCHANGE_ONE_CARD("Invertir Direccion"),
+  EXCHANGE_ONE_CARD("Intercambiar Carta"),
   WILD("Comodin"),
   WILD_DRAW_FOUR("Comodin + Roba 4"),
   USED_WILD_CARD("Comodin Usado"),
-  WILD_SEE_HAND("Invertir Direccion"),
+  WILD_SEE_HAND("Ver Mano"),
   NONE("Sin Simbolo");
   
   private String name;

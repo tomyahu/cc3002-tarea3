@@ -29,6 +29,7 @@ public class GUIView extends Application implements Observer, IView {
   
   NewUnoLogic game;
   NewGUIController ctrl;
+  RegularSkin skin;
   
   public static void main(String[] args) {
     launch(args);
@@ -68,6 +69,8 @@ public class GUIView extends Application implements Observer, IView {
     playerBuilder.addPlayer(p4);
     game = new NewUnoLogic(playerBuilder, new NormalUnoDeck());
     ctrl = new NewGUIController(game, this);
+    
+    skin = new RegularSkin("UnoCards");
   }
 
   @Override
