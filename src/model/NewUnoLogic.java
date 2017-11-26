@@ -1,6 +1,7 @@
 package model;
 
 import java.util.ArrayList;
+import java.util.Observable;
 
 import controller.IController;
 import model.card.ICardPilesManager;
@@ -16,7 +17,7 @@ import model.player.IPlayerManager;
 import model.player.UnoPlayerManager;
 import model.player.type.IPlayer;
 
-public class NewUnoLogic implements IGameLogic {
+public class NewUnoLogic extends Observable implements IGameLogic {
   private IPlayerManager playerManager;
   private ICardPilesManager cardManager;
   private ArrayList<ICard> drawWell;
