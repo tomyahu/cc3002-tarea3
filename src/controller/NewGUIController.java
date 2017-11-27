@@ -1,5 +1,6 @@
 package controller;
 
+import java.util.Observable;
 import java.util.Scanner;
 
 import javafx.event.ActionEvent;
@@ -11,7 +12,7 @@ import model.player.type.IPlayer;
 import view.AlertBox;
 import view.GUIView;
 
-public class NewGUIController implements IController, EventHandler<ActionEvent> {
+public class NewGUIController extends Observable implements IController, EventHandler<ActionEvent> {
   
   IGameLogic game;
   GUIView view;
@@ -53,6 +54,8 @@ public class NewGUIController implements IController, EventHandler<ActionEvent> 
 
   @Override
   public int AskForCardFromHand(IPlayer player) {
+    view.showPlayerHand(player);
+    
     showMessage("Elige una Carta");
     
     AlertBox cardAlert = new AlertBox();
@@ -99,14 +102,19 @@ public class NewGUIController implements IController, EventHandler<ActionEvent> 
   @Override
   public void playTurn() {
     game.startTurn(this);
-    view.updateCurrentStatus();
+    
+    setChanged();
+    notifyObservers();
+    
     IPlayer currentPlayer = game.getCurrentPlayer();
     boolean cardPlayed = false;
     while (!cardPlayed) {
       ICard card = currentPlayer.getCardToPlay(game, this);
       cardPlayed = game.playCard(card, this);
-      if(!cardPlayed) showMessage("No se puede poner esta carta.");
     }
+    
+    setChanged();
+    notifyObservers();
   }
 
   @Override

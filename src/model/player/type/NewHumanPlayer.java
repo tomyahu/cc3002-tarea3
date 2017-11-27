@@ -25,8 +25,11 @@ public class NewHumanPlayer extends AbstractPlayer {
   @Override
   public ICard getCardToPlay(IGameLogic game, IController ctrl) {
     
-    if(this.needsToDrawCard(game.getCurrentPlayedCard()))
-      return game.drawOneCard(this);
+    if(this.needsToDrawCard(game.getCurrentPlayedCard())){
+      ICard carta = game.drawOneCard(this);
+      ctrl.showMessage("Robaste un " + carta.toString());
+      return carta;
+    }
     
     int num = ctrl.AskForCardFromHand(this);
     return getCardFromHand(num);

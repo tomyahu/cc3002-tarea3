@@ -17,7 +17,7 @@ import model.player.IPlayerManager;
 import model.player.UnoPlayerManager;
 import model.player.type.IPlayer;
 
-public class NewUnoLogic extends Observable implements IGameLogic {
+public class NewUnoLogic implements IGameLogic {
   private IPlayerManager playerManager;
   private ICardPilesManager cardManager;
   private ArrayList<ICard> drawWell;
@@ -123,7 +123,8 @@ public class NewUnoLogic extends Observable implements IGameLogic {
   @Override
   public ICard drawOneCard(IPlayer player) {
     player.setSaidUNO(false);
-    return cardManager.addCardsToPlayer(player, 1).get(0);
+    ICard card = cardManager.addCardsToPlayer(player, 1).get(0);
+    return card;
   }
   
   @Override

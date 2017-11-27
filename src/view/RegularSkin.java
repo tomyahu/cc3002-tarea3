@@ -72,13 +72,18 @@ public class RegularSkin implements ISkin {
     map.put(Symbol.WILD_DRAW_FOUR.getName() + " " + Color.NONE.getName(), "file:assets/" + skinFolder + "/none/wild_draw_4.png");
     map.put(Symbol.WILD_SEE_HAND.getName() + " " + Color.NONE.getName(), "file:assets/" + skinFolder + "/none/wild_star.png");
     
-    
+    map.put("UNO", "file:assets/" + skinFolder + "/UNO.png");
     
   }
 
   @Override
   public String getCard(Color color, Symbol symbol) {
     return map.get(symbol.getName() + " " + color.getName());
+  }
+  
+  @Override
+  public String getCover() {
+    return map.get("UNO");
   }
 
 }

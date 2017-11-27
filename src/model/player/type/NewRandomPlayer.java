@@ -1,6 +1,7 @@
 package model.player.type;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 import controller.IController;
 import model.IGameLogic;
@@ -26,6 +27,12 @@ public class NewRandomPlayer extends AbstractPlayer {
 
   @Override
   public ICard getCardToPlay(IGameLogic game, IController ctrl) {
+    try {
+      TimeUnit.MILLISECONDS.sleep(1000);
+    } catch (InterruptedException e) {
+      
+    }
+    
     if (needsToDrawCard(game.getCurrentPlayedCard())) {
       return game.drawOneCard(this);
     } else {

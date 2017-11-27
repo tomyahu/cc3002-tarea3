@@ -23,7 +23,7 @@ public class ExchangeOneCard extends BasicCard {
     
     //Get player card to exchange
     ArrayList<ICard> actualHand = game.getCurrentPlayer().getHand();
-    ICard playerCard = actualHand.get(ctrl.AskForCardFromHand(game.getCurrentPlayer()));
+    ICard playerCard = game.getCurrentPlayer().getCardToPlay(game, ctrl);
     
     //Get other player card to exchange
     IPlayer playerSelected = game.getCurrentPlayer().selectPlayer(game, ctrl);

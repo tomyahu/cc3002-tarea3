@@ -43,6 +43,7 @@ public abstract class AbstractCard implements ICard {
   @Override
   public void executeAction(IGameLogic game, IController ctrl) {
     ctrl.updatePlayedCard();
+    ctrl.showMessage("El jugador " + game.getCurrentPlayer().toString() + " jugo un " + this.toString());
   }
   
   @Override

@@ -6,15 +6,15 @@ import java.util.Observer;
 
 import controller.NewGUIController;
 import model.NewUnoLogic;
-import model.card.deck.NormalUnoDeck;
+import model.card.deck.NewUnoDeck;
 import model.card.type.Color;
 import model.card.type.ICard;
 import model.card.type.Symbol;
 import model.player.IPlayerListBuilder;
 import model.player.UnoPlayerListBuilder;
-import model.player.type.HumanPlayer;
 import model.player.type.IPlayer;
-import model.player.type.RandomPlayer;
+import model.player.type.NewHumanPlayer;
+import model.player.type.NewRandomPlayer;
 import view.GUIView;
 import javafx.application.Application;
 import javafx.geometry.Pos;
@@ -23,10 +23,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.control.Button;
+import javafx.scene.text.Font;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;;
@@ -48,7 +48,6 @@ public class GUIView extends Application implements Observer, IView {
   
   private HBox playerDisplayTop;
   private HBox handDisplayCenter;
-  private HBox buttonsBottom;
   private VBox discardLeft;
   private VBox deckRight;
   
@@ -59,32 +58,27 @@ public class GUIView extends Application implements Observer, IView {
   @Override
   public void start(Stage primaryStage) throws Exception {
     setUpPane();
-    setUpSkin("UnoCards");
+    setUpSkin("TomimiSkin");
     setUpAssets();
     
-    
-    
-    game.addObserver(this);
+    ctrl.addObserver(this);
     
     window = primaryStage;
-    window.setTitle("UNO GUI version 0.2");
+    window.setTitle("UNO GUI version sonic 06");
     
-    /*Button buttonA = new Button("Next Card");
-    buttonA.setOnAction(e -> {
-      this.addImage(Color.RED, Symbol.DRAW_TWO, handDisplayCenter);
-    });
-    buttonsBottom.getChildren().add(buttonA);*/
     
-    updateCurrentStatus();
-    showPlayerHand(game.getCurrentPlayer());
     
     setPlaces();
     
-    
-    Scene scene = new Scene(layout, 1000, 600);
+    Scene scene = new Scene(layout, 1000, 400);
     window.setScene(scene);
     
     window.show();
+    
+    while (!game.hasEnded()) {
+      ctrl.playTurn();
+    }
+    game.announceWinner(ctrl);
   }
   
   private void setUpPane() {
@@ -92,7 +86,6 @@ public class GUIView extends Application implements Observer, IView {
     
     playerDisplayTop = new HBox();
     handDisplayCenter = new HBox();
-    buttonsBottom = new HBox();
     discardLeft = new VBox();
     deckRight = new VBox();
     
@@ -103,20 +96,23 @@ public class GUIView extends Application implements Observer, IView {
     playerDisplayTop.setSpacing(80);
     
     discardLeft.setAlignment(Pos.CENTER_LEFT);
-    deckRight.setAlignment(Pos.CENTER_RIGHT);
+    discardLeft.setSpacing(10);
+    
+    deckRight.setAlignment(Pos.CENTER);
+    deckRight.setSpacing(10);
   }
 
   private void setUpAssets(){
     IPlayerListBuilder playerBuilder = new UnoPlayerListBuilder();
-    IPlayer p1 = new HumanPlayer("Jugador 1");
-    IPlayer p2 = new RandomPlayer("CPU 1");
-    IPlayer p3 = new RandomPlayer("CPU 2");
-    IPlayer p4 = new RandomPlayer("CPU 3");
+    IPlayer p1 = new NewHumanPlayer("Jugador 1");
+    IPlayer p2 = new NewRandomPlayer("CPU 1");
+    IPlayer p3 = new NewRandomPlayer("CPU 2");
+    IPlayer p4 = new NewRandomPlayer("CPU 3");
     playerBuilder.addPlayer(p1);
     playerBuilder.addPlayer(p2);
     playerBuilder.addPlayer(p3);
     playerBuilder.addPlayer(p4);
-    game = new NewUnoLogic(playerBuilder, new NormalUnoDeck());
+    game = new NewUnoLogic(playerBuilder, new NewUnoDeck());
     ctrl = new NewGUIController(game, this);
   }
   
@@ -125,16 +121,63 @@ public class GUIView extends Application implements Observer, IView {
   }
   
   private void setPlaces() {
-    layout.setBottom(buttonsBottom);
-    layout.setCenter(handDisplayCenter);
-    layout.setTop(playerDisplayTop);
+    layout.setCenter(makeCenter());
+    layout.setTop(makeTop());
     layout.setLeft(discardLeft);
-    layout.setRight(deckRight);
+    layout.setRight(makeRight());
+  }
+  
+  private Node makeTop() {
+    VBox top = new VBox();
+    
+    top.setAlignment(Pos.TOP_CENTER);
+    
+    Label topLabel = new Label();
+    topLabel.setText("Players (current player in bold)");
+    topLabel.setFont(new Font("Arial", 16));
+    
+    top.setSpacing(10);
+    top.getChildren().addAll(topLabel, playerDisplayTop);
+    
+    
+    return top;
+  }
+  
+  private Node makeCenter() {
+    VBox center = new VBox();
+    center.setAlignment(Pos.CENTER);
+    center.setSpacing(10);
+    center.getChildren().add(new Label("Mano"));
+    
+    ScrollPane centerScroll = new ScrollPane();
+    centerScroll.setContent(handDisplayCenter);
+    centerScroll.setMaxWidth(700);
+    centerScroll.setMinHeight(170);
+    
+    center.getChildren().add(centerScroll);
+    return center;
+  }
+  
+  private Node makeRight() {
+    Label deckText = new Label("Deck");
+    deckText.setFont(new Font("Arial", 16));
+    deckRight.getChildren().add(deckText);
+    
+    ImageView coverView;
+    Image coverImage = new Image(skin.getCover());
+    coverView = new ImageView(coverImage);
+    coverView.setSmooth(true);
+    coverView.setCache(true);
+    coverView.setFitWidth(100);
+    coverView.setPreserveRatio(true);
+    
+    deckRight.getChildren().add(coverView);
+    
+    return deckRight;
   }
 
   @Override
   public void update(Observable o, Object arg) {
-    updatePlayedCard();
     updateCurrentStatus();
   }
 
@@ -142,25 +185,20 @@ public class GUIView extends Application implements Observer, IView {
   public void updateCurrentStatus() {
     playerDisplayTop.getChildren().clear();
     
-    
     ArrayList<IPlayer> players = game.getPlayers();
     
-    
-    Label currentP = new Label();
-    currentP.setText("Current\nPlayer");
-    playerDisplayTop.getChildren().add(currentP);
-    
+    int i = 0;
     for(IPlayer player : players) {
       Label playerNameLabel = new Label();
       playerNameLabel.setText(player.toString() + "\n" + player.getHandSize() + " cards");
+      if(game.getCurrentPlayer().equals(player)) playerNameLabel.setStyle("-fx-font-weight: bold;");
       playerDisplayTop.getChildren().add(playerNameLabel);
       
       Label next = new Label();
       next.setText("<");
-      playerDisplayTop.getChildren().add(next);
+      if(i < players.size() - 1) playerDisplayTop.getChildren().add(next);
+      i++;
     }
-    
-    
     
     
   }
@@ -171,10 +209,12 @@ public class GUIView extends Application implements Observer, IView {
     
     ArrayList<ICard> cartas = player.getHand();
     
-    for(int i = 0; i < Math.min(cartas.size(), 7); i++)
+    for(int i = 0; i < cartas.size(); i++)
     {
       addImage(cartas.get(i).getColor(), cartas.get(i).getSymbol(), handDisplayCenter);
     }
+    
+    
   }
 
   @Override
@@ -192,8 +232,12 @@ public class GUIView extends Application implements Observer, IView {
   public void updatePlayedCard() {
     discardLeft.getChildren().clear();
     
-    ICard currentCard = game.getCurrentPlayedCard();
+    Label txt = new Label();
+    txt.setText("Last Card Played");
+    txt.setFont(new Font("Arial", 16));
+    discardLeft.getChildren().add(txt);
     
+    ICard currentCard = game.getCurrentPlayedCard();
     addImage(currentCard.getColor(), currentCard.getSymbol(), discardLeft);
   }
   
@@ -205,7 +249,6 @@ public class GUIView extends Application implements Observer, IView {
   
   private Node makeCardView(Color color, Symbol symbol) {
     ImageView image;
-    
     String path = skin.getCard(color, symbol);
     Image cardImage = new Image(path);
     image = new ImageView(cardImage);

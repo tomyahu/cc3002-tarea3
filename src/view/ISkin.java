@@ -13,4 +13,10 @@ public interface ISkin {
    */
   String getCard(Color color, Symbol symbol);
   
+  /**
+   * Gets the direction of the deck cover image.
+   * @return the direction of the deck cover image.
+   */
+  String getCover();
+  
 }
