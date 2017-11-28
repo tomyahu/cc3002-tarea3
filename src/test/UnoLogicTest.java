@@ -8,7 +8,6 @@ import org.junit.Test;
 import controller.IController;
 import controller.NullController;
 import model.IGameLogic;
-import model.NewUnoLogic;
 import model.UnoLogic;
 import model.card.deck.NumericDeck;
 import model.card.deck.TestingDeck;

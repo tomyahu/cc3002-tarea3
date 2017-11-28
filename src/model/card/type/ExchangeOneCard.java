@@ -1,8 +1,6 @@
 package model.card.type;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
-
 import controller.IController;
 import model.IGameLogic;
 import model.player.type.IPlayer;
@@ -22,7 +20,6 @@ public class ExchangeOneCard extends BasicCard {
     super.executeAction(game, ctrl);
     
     //Get player card to exchange
-    ArrayList<ICard> actualHand = game.getCurrentPlayer().getHand();
     ICard playerCard = game.getCurrentPlayer().getCardToPlay(game, ctrl);
     
     //Get other player card to exchange

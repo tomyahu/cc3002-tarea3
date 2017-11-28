@@ -1,17 +1,11 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.Observable;
-
 import controller.IController;
 import model.card.ICardPilesManager;
 import model.card.UnoCardPilesManager;
 import model.card.deck.IDeckStrategy;
-import model.card.type.Color;
 import model.card.type.ICard;
-import model.card.type.NullCard;
-import model.card.type.NullCardBuilder;
-import model.card.type.Symbol;
 import model.player.IPlayerListBuilder;
 import model.player.IPlayerManager;
 import model.player.UnoPlayerManager;
