@@ -26,7 +26,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;;
@@ -47,9 +46,11 @@ public class GUIView extends Application implements Observer, IView {
   private Stage window;
   
   private HBox playerDisplayTop;
-  private HBox handDisplayCenter;
+  private VBox handDisplayCenter;
   private VBox discardLeft;
   private VBox deckRight;
+  
+  private Label centerMessage;
   
   public static void main(String[] args) {
     launch(args);
@@ -64,9 +65,7 @@ public class GUIView extends Application implements Observer, IView {
     ctrl.addObserver(this);
     
     window = primaryStage;
-    window.setTitle("UNO GUI version sonic 06");
-    
-    
+    window.setTitle("UNO GUI version 1.0");
     
     setPlaces();
     
@@ -79,13 +78,18 @@ public class GUIView extends Application implements Observer, IView {
       ctrl.playTurn();
     }
     game.announceWinner(ctrl);
+    
+    window.close();
   }
   
+  /**
+   * Sets up the basic elements of the pane and gives the some attributes
+   */
   private void setUpPane() {
     layout = new BorderPane();
     
     playerDisplayTop = new HBox();
-    handDisplayCenter = new HBox();
+    handDisplayCenter = new VBox();
     discardLeft = new VBox();
     deckRight = new VBox();
     
@@ -100,8 +104,14 @@ public class GUIView extends Application implements Observer, IView {
     
     deckRight.setAlignment(Pos.CENTER);
     deckRight.setSpacing(10);
+    
+    centerMessage = new Label();
+    centerMessage.setFont(new Font("Arial", 16));
   }
-
+  
+  /**
+   * Sets ups the elements of the game (The players, logic, controller, etc.)
+   */
   private void setUpAssets(){
     IPlayerListBuilder playerBuilder = new UnoPlayerListBuilder();
     IPlayer p1 = new NewHumanPlayer("Jugador 1");
@@ -116,17 +126,28 @@ public class GUIView extends Application implements Observer, IView {
     ctrl = new NewGUIController(game, this);
   }
   
+  /**
+   * Sets Up the skin of the cards it is going to be used.
+   * @param folder The folder of the skin.
+   */
   private void setUpSkin(String folder) {
     skin = new RegularSkin(folder);
   }
   
+  /**
+   * Sets the places of the components in the pane.
+   */
   private void setPlaces() {
     layout.setCenter(makeCenter());
     layout.setTop(makeTop());
-    layout.setLeft(discardLeft);
+    layout.setLeft(makeLeft());
     layout.setRight(makeRight());
   }
   
+  /**
+   * Sets up the elements of the top part of the border pane.
+   * @return The elements of the top part of the pane.
+   */
   private Node makeTop() {
     VBox top = new VBox();
     
@@ -143,21 +164,24 @@ public class GUIView extends Application implements Observer, IView {
     return top;
   }
   
+  /**
+   * Sets up the elements of the center part of the border pane.
+   * @return The elements of the center part of the pane.
+   */
   private Node makeCenter() {
     VBox center = new VBox();
     center.setAlignment(Pos.CENTER);
     center.setSpacing(10);
-    center.getChildren().add(new Label("Mano"));
     
-    ScrollPane centerScroll = new ScrollPane();
-    centerScroll.setContent(handDisplayCenter);
-    centerScroll.setMaxWidth(700);
-    centerScroll.setMinHeight(170);
-    
-    center.getChildren().add(centerScroll);
+    centerMessage.setText("Mano");
+    center.getChildren().addAll(centerMessage, handDisplayCenter);
     return center;
   }
   
+  /**
+   * Sets up the elements of the right part of the border pane.
+   * @return The elements of the right part of the pane.
+   */
   private Node makeRight() {
     Label deckText = new Label("Deck");
     deckText.setFont(new Font("Arial", 16));
@@ -176,6 +200,14 @@ public class GUIView extends Application implements Observer, IView {
     return deckRight;
   }
 
+  /**
+   * Sets up the elements of the left part of the border pane.
+   * @return The elements of the left part of the pane.
+   */
+  private Node makeLeft() {
+    return discardLeft;
+  }
+  
   @Override
   public void update(Observable o, Object arg) {
     updateCurrentStatus();
@@ -198,6 +230,9 @@ public class GUIView extends Application implements Observer, IView {
       next.setText("<");
       if(i < players.size() - 1) playerDisplayTop.getChildren().add(next);
       i++;
+      
+      handDisplayCenter.getChildren().clear();
+      centerMessage.setText("La CPU está Jugando...");
     }
     
     
@@ -205,21 +240,33 @@ public class GUIView extends Application implements Observer, IView {
 
   @Override
   public void showPlayerHand(IPlayer player) {
+    centerMessage.setText("Mano");
     handDisplayCenter.getChildren().clear();
     
     ArrayList<ICard> cartas = player.getHand();
     
-    for(int i = 0; i < cartas.size(); i++)
+    for(int i = 0; i < cartas.size()/6; i++)
     {
-      addImage(cartas.get(i).getColor(), cartas.get(i).getSymbol(), handDisplayCenter);
+      HBox lineaCartas = new HBox();
+      for(int j = 0; j < 6; j++)
+        addImage(cartas.get(i*6 + j).getColor(), cartas.get(i*6 + j).getSymbol(), lineaCartas);
+      lineaCartas.setAlignment(Pos.CENTER);
+      handDisplayCenter.getChildren().add(lineaCartas);
     }
     
+    HBox lineaCartas2 = new HBox();
+    for(int j = 0; j < cartas.size()%6; j++)
+      addImage(cartas.get((cartas.size()/6)*6 + j).getColor(), cartas.get((cartas.size()/6)*6 + j).getSymbol(), lineaCartas2);
+    lineaCartas2.setAlignment(Pos.CENTER);
+    handDisplayCenter.getChildren().add(lineaCartas2);
+    
+    this.resizeWindowProportions(1000.0, Math.max(500.0, (double) (350 + 160*(cartas.size()/6))));
     
   }
 
   @Override
   public void showMessage(String message) {
-    AlertBox alert = new AlertBox();
+    VBoxAlertBox alert = new VBoxAlertBox();
     alert.setTitle("Notificación")
          .addMessage(message)
          .addButton("Cerrar", 0)
@@ -241,12 +288,24 @@ public class GUIView extends Application implements Observer, IView {
     addImage(currentCard.getColor(), currentCard.getSymbol(), discardLeft);
   }
   
+  /**
+   * Adds the image of a card to the component place.
+   * @param color The color of the card.
+   * @param symbol The symbol of the card.
+   * @param place The component where the image is added.
+   */
   private void addImage(Color color, Symbol symbol, Pane place) {
     Node image = makeCardView(color,symbol);
     
     place.getChildren().add(image);
   }
   
+  /**
+   * Returns the imageView of a card in the form of a Node.
+   * @param color The color of the card.
+   * @param symbol The symbol of the card.
+   * @return The component in which is stored the image.
+   */
   private Node makeCardView(Color color, Symbol symbol) {
     ImageView image;
     String path = skin.getCard(color, symbol);
@@ -258,5 +317,15 @@ public class GUIView extends Application implements Observer, IView {
     image.setPreserveRatio(true);
     return image;
   }
-
+  
+  /**
+   * Resize the window proportions to width x height.
+   * @param width The new width of the window.
+   * @param height The new height of the window.
+   */
+  private void resizeWindowProportions(double width, double height) {
+    window.setWidth(width);
+    window.setHeight(height);
+  }
+  
 }

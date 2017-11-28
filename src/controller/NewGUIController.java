@@ -3,16 +3,14 @@ package controller;
 import java.util.Observable;
 import java.util.Scanner;
 
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import model.IGameLogic;
 import model.card.type.Color;
 import model.card.type.ICard;
 import model.player.type.IPlayer;
-import view.AlertBox;
 import view.GUIView;
+import view.VBoxAlertBox;
 
-public class NewGUIController extends Observable implements IController, EventHandler<ActionEvent> {
+public class NewGUIController extends Observable implements IController {
   
   IGameLogic game;
   GUIView view;
@@ -29,14 +27,14 @@ public class NewGUIController extends Observable implements IController, EventHa
     this.game = game;
     this.in = new Scanner(System.in);
     showMessage("¡Bienvenido a JavaUNO!");
-    game.getCurrentPlayedCard().executeAction(game, this);
+    view.updatePlayedCard();
   }
   
   @Override
   public Color askForColor() {
     showMessage("Elige un Color");
     
-    AlertBox colorAlert = new AlertBox();
+    VBoxAlertBox colorAlert = new VBoxAlertBox();
     
     colorAlert.setTitle("Colores")
               .setMinWidth(300);
@@ -58,7 +56,7 @@ public class NewGUIController extends Observable implements IController, EventHa
     
     showMessage("Elige una Carta");
     
-    AlertBox cardAlert = new AlertBox();
+    VBoxAlertBox cardAlert = new VBoxAlertBox();
     
     cardAlert.setTitle("Cartas")
              .setMinWidth(300);
@@ -76,7 +74,7 @@ public class NewGUIController extends Observable implements IController, EventHa
   public IPlayer AskForPlayer() {
     showMessage("Elige a un Jugador");
     
-    AlertBox playerAlert = new AlertBox();
+    VBoxAlertBox playerAlert = new VBoxAlertBox();
     
     playerAlert.setTitle("Jugadores")
                .setMinWidth(300);
@@ -120,12 +118,6 @@ public class NewGUIController extends Observable implements IController, EventHa
   @Override
   public void updatePlayedCard() {
     view.updatePlayedCard();
-  }
-
-  @Override
-  public void handle(ActionEvent event) {
-    // TODO Auto-generated method stub
-    
   }
 
 }

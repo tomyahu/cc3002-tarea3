@@ -10,7 +10,12 @@ public class RegularSkin implements ISkin {
 
   private HashMap<String, String> map;
   private String skinFolder;
-
+  
+  /**
+   * Creates a new instance of RegularSkin storing the paths
+   * of the images needed in map.
+   * @param strFold The name of the folder the textures are in.
+   */
   public RegularSkin(String strFold) {
     skinFolder = strFold;
     

@@ -27,12 +27,6 @@ public class NewRandomPlayer extends AbstractPlayer {
 
   @Override
   public ICard getCardToPlay(IGameLogic game, IController ctrl) {
-    try {
-      TimeUnit.MILLISECONDS.sleep(1000);
-    } catch (InterruptedException e) {
-      
-    }
-    
     if (needsToDrawCard(game.getCurrentPlayedCard())) {
       return game.drawOneCard(this);
     } else {

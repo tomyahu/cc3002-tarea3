@@ -6,13 +6,15 @@ import javafx.scene.layout.*;
 import javafx.scene.control.*;
 import javafx.geometry.*;
 
-public class AlertBox {
+public class VBoxAlertBox extends AbstractAlertBox {
 
-  private Stage window;
   private VBox layout;
   private int value;
-
-  public AlertBox() {
+  
+  /**
+   * Initializes a new instance of a VBoxAlertBox.
+   */
+  public VBoxAlertBox() {
     window = new Stage();
     window.initModality(Modality.APPLICATION_MODAL);
 
@@ -22,24 +24,16 @@ public class AlertBox {
     value = -1;
   }
 
-  public AlertBox setTitle(String title) {
-    window.setTitle(title);
-    return this;
-  }
-
-  public AlertBox setMinWidth(int width) {
-    window.setMinWidth(250);
-    return this;
-  }
-
-  public AlertBox addMessage(String message) {
+  @Override
+  public IAlertBox addMessage(String message) {
     Label label = new Label();
     label.setText(message);
     layout.getChildren().add(label);
     return this;
   }
   
-  public AlertBox addButton(String message, int returnValue) {
+  @Override
+  public IAlertBox addButton(String message, int returnValue) {
     Button button = new Button(message);
     button.setOnAction(e -> {
                              window.close();
@@ -47,7 +41,8 @@ public class AlertBox {
     layout.getChildren().add(button);
     return this;
   }
-
+  
+  @Override
   public int display() {
     Scene scene = new Scene(layout);
     window.setScene(scene);
