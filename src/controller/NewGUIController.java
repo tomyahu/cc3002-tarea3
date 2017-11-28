@@ -8,7 +8,7 @@ import model.card.type.Color;
 import model.card.type.ICard;
 import model.player.type.IPlayer;
 import view.GUIView;
-import view.VBoxAlertBox;
+import view.alertBoxes.VBoxAlertBox;
 
 public class NewGUIController extends Observable implements IController {
   

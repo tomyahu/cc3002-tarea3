@@ -16,11 +16,6 @@ public class WildSeeHandCard extends WildCard {
   }
   
   @Override
-  public boolean isFirstPlayable() {
-    return false;
-  }
-  
-  @Override
   public void executeAction(IGameLogic game, IController ctrl) {
     super.executeAction(game, ctrl);
     

@@ -12,7 +12,7 @@
   </interface>  
   <class id="2" language="java" name="model.card.deck.TestingDeck" project="cc3002-tarea3" 
     file="/cc3002-tarea3/src/model/card/deck/TestingDeck.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="87" width="142" x="126" y="182"/>    
+    <position height="-1" width="-1" x="120" y="272"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -21,7 +21,7 @@
   </class>  
   <class id="3" language="java" name="model.card.deck.NormalUnoDeck" project="cc3002-tarea3" 
     file="/cc3002-tarea3/src/model/card/deck/NormalUnoDeck.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="69" width="138" x="308" y="182"/>    
+    <position height="-1" width="-1" x="331" y="278"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
@@ -30,22 +30,35 @@
   </class>  
   <class id="4" language="java" name="model.card.deck.NumericDeck" project="cc3002-tarea3" 
     file="/cc3002-tarea3/src/model/card/deck/NumericDeck.java" binary="false" corner="BOTTOM_RIGHT">    
-    <position height="69" width="138" x="486" y="182"/>    
+    <position height="-1" width="-1" x="516" y="278"/>    
     <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
       sort-features="false" accessors="true" visibility="true">      
       <attributes public="true" package="true" protected="true" private="true" static="true"/>      
       <operations public="true" package="true" protected="true" private="true" static="true"/>    
     </display>  
   </class>  
-  <realization id="5">    
-    <end type="SOURCE" refId="3"/>    
-    <end type="TARGET" refId="1"/>  
-  </realization>  
+  <class id="5" language="java" name="model.card.deck.NewUnoDeck" project="cc3002-tarea3" 
+    file="/cc3002-tarea3/src/model/card/deck/NewUnoDeck.java" binary="false" corner="BOTTOM_RIGHT">    
+    <position height="69" width="133" x="643" y="241"/>    
+    <display autosize="true" stereotype="false" package="false" initial-value="false" signature="true" 
+      sort-features="false" accessors="true" visibility="true">      
+      <attributes public="true" package="true" protected="true" private="true" static="true"/>      
+      <operations public="true" package="true" protected="true" private="true" static="true"/>    
+    </display>  
+  </class>  
   <realization id="6">    
-    <end type="SOURCE" refId="2"/>    
+    <end type="SOURCE" refId="5"/>    
     <end type="TARGET" refId="1"/>  
   </realization>  
   <realization id="7">    
+    <end type="SOURCE" refId="3"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <realization id="8">    
+    <end type="SOURCE" refId="2"/>    
+    <end type="TARGET" refId="1"/>  
+  </realization>  
+  <realization id="9">    
     <end type="SOURCE" refId="4"/>    
     <end type="TARGET" refId="1"/>  
   </realization>  

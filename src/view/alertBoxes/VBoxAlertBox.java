@@ -1,4 +1,4 @@
-package view;
+package view.alertBoxes;
 
 import javafx.stage.*;
 import javafx.scene.*;

@@ -16,6 +16,7 @@ import model.player.type.IPlayer;
 import model.player.type.NewHumanPlayer;
 import model.player.type.NewRandomPlayer;
 import view.GUIView;
+import view.alertBoxes.VBoxAlertBox;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
